@@ -1,3 +1,9 @@
+# Artist ranking predictor.
+## Supervised Machine Learning
+
+Using a time series of artist ranking, from established data sources like [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP) or [`Spotify Api`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows).
+
+
 # API ENDPOINT EXAMPLE:
 
 ### Request through a `main.py`
@@ -47,4 +53,5 @@ def predict_cpp(id):
 ### Possible graphic representation of the data:
 
 ![Delta-time and overall artist rank.](/INPUT/basic_data_points.png)
+
 ![Prediction representation](/INPUT/compare_prediction_gt.png)
