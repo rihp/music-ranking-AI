@@ -1,7 +1,7 @@
 # Artist ranking predictor.
 ## Supervised Machine Learning
 
-Using a time series of artist ranking, from established data sources like [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP) or [`Spotify Api`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows).
+Using a time series of artist ranking, from established data sources like [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP) or [`Spotify API`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows).
 
 Consider the use of **Reinforcement Learning**; as time goes by, the model will learn to return more accurate predictions.
 
@@ -14,6 +14,7 @@ from flask import app
 (...)
 from src.predictor import predict
 
+# Artist - Predict CPP (Cross-Platform Performance)
 @app.route(/api/artist/<id>/cpp-rank-prediction?days=4)
 def predict_cpp(id):
     days = get_params(days)
@@ -52,12 +53,22 @@ def predict_cpp(id):
 }
 ```
 
-### Possible graphic representation of the data:
+### Possible graphic representation of the data (MVP):
+Considering only the ground truth, plot behavior of the artist ranking vector on `matlotlib`:
 
 ##### Evolution of artist ranking metric over time. 
-(Considering only the ground truth.)
-
 ![Delta-time and overall artist rank.](/INPUT/basic_data_points.png)
 
 ##### Comparing our predictions with the `Ground Truth`.
 ![Prediction representation](/INPUT/compare_prediction_gt.png)
+
+
+### More possible implementations:
+Include a comparison of different machine learning models and their prediction metrics.
+![Prediction Models Compared](/INPUT/2013Ma_Sun_Cong.png)
+
+- Enrich dataframes with `Twitter API` requests, analyzed by the `Google Cloud Natural Language API` [1](https://cloud.google.com/natural-language) | [API](https://cloud.google.com/natural-language/docs/reference/rest/?apix=true) | [Languages supported](https://cloud.google.com/natural-language/docs/languages)
+
+
+### Bonus:
+Send a tweet when a new prediction is made for an specified `artist_id`
