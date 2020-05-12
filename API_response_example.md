@@ -85,14 +85,14 @@ Include a comparison of different machine learning models and their prediction m
                         {
                         "spotify_id": 6970440,
                         "predicted_rank": 2,
-                        "model": "H2O_AutoML",
+                        "model": "linear_regressor",
                         "confidence":0.76 ,
                         "timestp": "2019-06-06T07:00:00.000Z"
                         },
                         {
                         "spotify_id": 6970440,
                         "predicted_rank": 2,
-                        "model": "H2O_AutoML",
+                        "model": "GradientBoostingRegressor",
                         "confidence":0.42 ,
                         "timestp": "2019-06-06T07:00:00.000Z"
                         }       
