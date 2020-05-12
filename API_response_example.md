@@ -69,6 +69,42 @@ Include a comparison of different machine learning models and their prediction m
 
 - Enrich dataframes with `Twitter API` requests, analyzed by the `Google Cloud Natural Language API` [1](https://cloud.google.com/natural-language) | [API](https://cloud.google.com/natural-language/docs/reference/rest/?apix=true) | [Languages supported](https://cloud.google.com/natural-language/docs/languages)
 
+### HTTP Response (Multiple models)
+```json
+ {
+    "obj": [
+        {
+            "spotify_id": 6970440,
+            "predictions": [{
+                        "spotify_id": 6970440,
+                        "predicted_rank": 1,
+                        "model": "H2O_AutoML",
+                        "confidence":0.85 ,
+                        "timestp": "2019-06-06T07:00:00.000Z"
+                        },
+                        {
+                        "spotify_id": 6970440,
+                        "predicted_rank": 2,
+                        "model": "H2O_AutoML",
+                        "confidence":0.76 ,
+                        "timestp": "2019-06-06T07:00:00.000Z"
+                        },
+                        {
+                        "spotify_id": 6970440,
+                        "predicted_rank": 2,
+                        "model": "H2O_AutoML",
+                        "confidence":0.42 ,
+                        "timestp": "2019-06-06T07:00:00.000Z"
+                        }       
+                    ]  
+                }]
+        }
+    ]
+}
+```
+
+
 
 ### Bonus:
 Send a tweet when a new prediction is made for an specified `artist_id`
+
