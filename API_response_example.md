@@ -103,8 +103,7 @@ Include a comparison of different machine learning models and their prediction m
 }
 ```
 
-
-
-### Bonus:
-Send a tweet when a new prediction is made for an specified `artist_id`
-
+### Bonus (Exposure & Portfolio):
+- Send a tweet when a new prediction is made for an specified `artist_id`
+- Generate a docker image
+- Deploy to Heroku
