@@ -54,6 +54,10 @@ def predict_cpp(id):
 
 ### Possible graphic representation of the data:
 
+##### Evolution of artist ranking metric over time. 
+(Considering only the ground truth.)
+
 ![Delta-time and overall artist rank.](/INPUT/basic_data_points.png)
 
+##### Comparing our predictions with the `Ground Truth`.
 ![Prediction representation](/INPUT/compare_prediction_gt.png)
