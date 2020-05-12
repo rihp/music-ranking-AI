@@ -1,13 +1,14 @@
 # API ENDPOINT EXAMPLE:
 
-### Request
+### Request through a `main.py`
 ```
+from os import get_params
 from flask import (...)
 from src.predictor import predict
 
 @api.route(/api/artist/<id>/cpp-rank-prediction?days=4)
 def predict_cpp(id):
-    days = getparams(days)
+    days = get_params(days)
     return predict(days)
 ```
 
@@ -42,3 +43,8 @@ def predict_cpp(id):
     ]
 }
 ```
+
+### Possible graphic representation of the data:
+
+![Delta-time and overall artist rank.](/INPUT/basic_data_points.png)
+![Prediction representation](/INPUT/compare_prediction_gt.png)
