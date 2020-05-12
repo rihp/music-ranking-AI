@@ -8,7 +8,7 @@ Consider the use of **Reinforcement Learning**; as time goes by, the model will 
 # API ENDPOINT EXAMPLE:
 
 ### HTTP Endpoint from our `api.py`
-```
+```python
 from os import get_params
 from flask import app
 (...)
@@ -21,7 +21,7 @@ def predict_cpp(id):
 ```
 
 ### HTTP Response
-```
+```json
  {
     "obj": [
         {
