@@ -3,22 +3,24 @@
 
 Using a time series of artist ranking, from established data sources like [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP) or [`Spotify Api`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows).
 
+Consider the use of **Reinforcement Learning**; as time goes by, the model will learn to return more accurate predictions.
 
 # API ENDPOINT EXAMPLE:
 
-### Request through a `main.py`
+### HTTP Endpoint from our `api.py`
 ```
 from os import get_params
-from flask import (...)
+from flask import app
+(...)
 from src.predictor import predict
 
-@api.route(/api/artist/<id>/cpp-rank-prediction?days=4)
+@app.route(/api/artist/<id>/cpp-rank-prediction?days=4)
 def predict_cpp(id):
     days = get_params(days)
     return predict(days)
 ```
 
-### Response
+### HTTP Response
 ```
  {
     "obj": [
