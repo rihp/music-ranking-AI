@@ -4,7 +4,7 @@
 Using a time series of artist ranking, from established data sources like:
 - [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP)
 - [`Spotify API`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows) | [`Spotify Developer Access`](https://developer.spotify.com/) | [`Spotify Search`](https://developer.spotify.com/ | [`SDA ToS`]documentation/web-api/reference/search/search/)
-- [`iTunes Search API`](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html#//apple_ref/doc/uid/TP40017632-CH8-SW1) | [`iTunes Music Charts`](https://developer.apple.com/documentation/applemusicapi/get_catalog_charts) | [`Create Apple Developer Token`](https://developer.apple.com/documentation/applemusicapi/getting_keys_and_creating_tokens)
+- [`iTunes Search API`](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html#//apple_ref/doc/uid/TP40017632-CH8-SW1) | [`iTunes Music Charts`](https://developer.apple.com/documentation/applemusicapi/get_catalog_charts) | [`Create Apple Developer Token`](https://developer.apple.com/documentation/applemusicapi/getting_keys_and_creating_tokens) | [`iTunes MusicKit`](https://help.apple.com/developer-account/#/devce5522674)
 
 Consider the use of **Reinforcement Learning**; as time goes by, the model will learn to return more accurate predictions.
 
