@@ -1,7 +1,7 @@
 # Artist ranking predictor.
 ## Supervised Machine Learning
-¿Can we predict the global ranking of a music artist?
-¿Will Bad Bunny pass Drake when they release they both new albums?
+- Can we predict the global ranking of a music artist?
+- Will Bad Bunny pass Drake when they release new albums?
 
 What is the `Trend` in the global ranking? Is it Seasonal?
 
