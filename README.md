@@ -1,81 +1,102 @@
-# Twitter sentiment prediction
+# Artist ranking predictor.
+## Supervised Machine Learning
 
-¿Can we predict the future median SIA score of a twitter hashtag?
+Using a time series of artist ranking, from established data sources like:
+- [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP)
+- [`Spotify API`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows) | [`Spotify Developer Access`](https://developer.spotify.com/) | [`Spotify Search`](https://developer.spotify.com/ | [`SDA ToS`]documentation/web-api/reference/search/search/)
+- [`iTunes Search API`](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html#//apple_ref/doc/uid/TP40017632-CH8-SW1) | [`iTunes Music Charts`](https://developer.apple.com/documentation/applemusicapi/get_catalog_charts) | [`Create Apple Developer Token`](https://developer.apple.com/documentation/applemusicapi/getting_keys_and_creating_tokens) | [`iTunes MusicKit`](https://help.apple.com/developer-account/#/devce5522674)
 
-Is there a Trend? Is it Seasonal?
-[insert  fourrier lab image here]
+Consider the use of **Reinforcement Learning**; as time goes by, the model will learn to return more accurate predictions.
 
-It's often formulated as a `classification` task [says this article](https://www.ntu.edu.sg/home/axsun/paper/sun_jasist13a.pdf).
+# API ENDPOINT EXAMPLE:
 
-    ```
-    Because   of   the   strong   relationshipbetween viewer reviews of a movie and the revenue of themovie,  Liu  et al.  (2007)  analyzed  sentiment  informationfrom  blogs  discussing  movies  and  leveraged  the  autore-gressive  model  to  predict  movie  revenues  in  the  nearfuture. Liu et al. (2011) proposed using various regressionalgorithms  to  predict  the  satisfaction  of  web  users  whosearch   with   the   community-based   question-answeringsystem, and they found that LR yields the best experimen-tal  outcomes.
-    ```
+### HTTP Endpoint from our `api.py`
+```python
+from os import get_params
+from flask import app
+(...)
+from src.predictor import predict
 
-## Objective 1
+# Artist - Predict CPP (Cross-Platform Performance)
+@app.route(/api/artist/<id>/cpp-rank-prediction?days=2)
+def predict_cpp(id):
+    days = get_params(days)
+    return predict(days)
+```
 
-1. Using Chartmetric
+### HTTP Response (`JSON`)
+```json
+ {
+    "obj": [
+        {
+            "spotify_id": 6970440,
+            "predicted_rank": 4,
+            "confidence":0.95 ,
+            "timestp": "2019-06-09T07:00:00.000Z"
+        },
+        {
+            "spotify_id": 6970440,
+            "predicted_rank": 3,
+            "confidence":0.75 ,
+            "timestp": "2019-06-08T07:00:00.000Z"
+        }
+    ]
+}
+```
 
+### Possible graphic representation of the data (MVP):
+Considering only the ground truth, plot behavior of the artist ranking vector on `matlotlib`:
 
-1. Using Twitter API to query a popular #Hashtag or #Username 
+##### Evolution of artist ranking metric over time. 
+![Delta-time and overall artist rank.](/INPUT/basic_data_points.png)
 
-
-2. Generate a timeseries of the tweets
-
-4. Bin the tweets by week, day, or hour
-
-3. Calculate the SIA scores for each tweet.
-
-5. Use the SIA scores and the time intervals to create a vector (evolution of SIA on a timeframe)
-
-6. Use a supervised learning approach to predict the SIA score in a future point in time.
-
-7. Create a Flask API to 
-
-8. Generate a docker image
-
-9. Deploy to Heroku
-
-10. Visualize the prediction on an API endpoint.
-
-11. Enrich the timeseries data, with more APIs (ie: Chartmetric)
-
-
-### Investigate:
-- Twitter API:
-    - `Tweepy`
-
-- NLP Libraries: 
-    - `Google Cloud Natural Language API` [1](https://cloud.google.com/natural-language) | [API](https://cloud.google.com/natural-language/docs/reference/rest/?apix=true) | [Languages supported](https://cloud.google.com/natural-language/docs/languages)
-    - `nltk`
-    - `spacy`
-    - `TextBlob`
-    - `polyglot`
-    - `CoreNLP`
-    - `Gensim`
-
--  NLP Concepts:
-    - `Modal Words`[1](https://dzone.com/articles/nlp-analysis-python-using)
-    - `Tokenize`[1](https://en.wikipedia.org/wiki/Lexical_analysis#Tokenization) [2]()
-    - `Lemma`
-
-- Database
-    - `MongoAtlas` vs `MySQL` ?
-
-##### Prediction:    
-- Libraries
-    - `H2O AutoML`
-    - `sklearn`
-    - `Keras`
-
-- Supervised Learning
-    - `NLP models`
+##### Comparing our predictions with the `Ground Truth`.
+![Prediction representation](/INPUT/compare_prediction_gt.png)
 
 
-    - Metrics `precision`, `accuracy`, `F-measure` and `recall`
+### More possible implementations:
+Include a comparison of different machine learning models and their prediction metrics.
 
-    - `RMSE` https://arxiv.org/pdf/1211.6496.pdf
+![Prediction Models Compared](/INPUT/2013Ma_Sun_Cong.png)
 
-##### Visualization
+- Enrich dataframes with `Twitter API` requests, analyzed by the `Google Cloud Natural Language API` [1](https://cloud.google.com/natural-language) | [API](https://cloud.google.com/natural-language/docs/reference/rest/?apix=true) | [Languages supported](https://cloud.google.com/natural-language/docs/languages)
 
-![Prediction comparison graph](/INPUT/compare_prediction_gt.png)
-!
+### HTTP Response (Multiple models) (`JSON`)
+```json
+ {
+    "obj": [
+        {
+            "spotify_id": 6970440,
+            "predictions": [{
+                        "spotify_id": 6970440,
+                        "predicted_rank": 1,
+                        "model": "H2O_AutoML",
+                        "confidence":0.85 ,
+                        "timestp": "2019-06-06T07:00:00.000Z"
+                        },
+                        {
+                        "spotify_id": 6970440,
+                        "predicted_rank": 2,
+                        "model": "linear_regressor",
+                        "confidence":0.76 ,
+                        "timestp": "2019-06-06T07:00:00.000Z"
+                        },
+                        {
+                        "spotify_id": 6970440,
+                        "predicted_rank": 2,
+                        "model": "GradientBoostingRegressor",
+                        "confidence":0.42 ,
+                        "timestp": "2019-06-06T07:00:00.000Z"
+                        }       
+                    ]  
+                }
+            ]
+        }
+    ]
+}
+```
+
+### Bonus (Exposure & Portfolio):
+- Send a tweet when a new prediction is made for an specified `artist_id`
+- Generate a docker image
+- Deploy to Heroku

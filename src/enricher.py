@@ -4,6 +4,15 @@ from pymongo import MongoClient
 
 load_dotenv()
 
+def get_artist_id(artist_id):
+    pass
+
+def get_artist(artist_id):
+    """
+    Endpoint : https://api.spotify.com/v1/artists/{id}   
+    """
+    res = requests.get(f"https://api.spotify.com/v1/artists/{artist_id}")
+    return 
 
 def get_spotify_ranking(artist_id, start=None, end=None):
     """
