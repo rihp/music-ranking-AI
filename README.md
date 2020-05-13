@@ -2,10 +2,10 @@
 ## Supervised Machine Learning
 - Can we predict the global ranking of a music artist?
 - Will Bad Bunny pass Drake when they release new albums?
+- What is the `trend` in the global ranking?
+- Is the `rank` metric seasonal?
 
-What is the `Trend` in the global ranking? Is it Seasonal?
-
-Using a time series of many artist rankings, we will try to accurately predict what will be their rank in the future.
+**Using a time series of many artist rankings, we will try to accurately predict what will be their rank in the future.**
 
 Proposed data sources:
 - [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP)
