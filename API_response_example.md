@@ -3,7 +3,7 @@
 
 Using a time series of artist ranking, from established data sources like:
 - [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP)
-- [`Spotify API`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows) | [`Spotify Developer Access`](https://developer.spotify.com/) | [`Spotify Search`](https://developer.spotify.com/documentation/web-api/reference/search/search/)
+- [`Spotify API`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows) | [`Spotify Developer Access`](https://developer.spotify.com/) | [`Spotify Search`](https://developer.spotify.com/ | [`SDA ToS`]documentation/web-api/reference/search/search/)
 - [`iTunes Search API`](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html#//apple_ref/doc/uid/TP40017632-CH8-SW1) | [`iTunes Music Charts`](https://developer.apple.com/documentation/applemusicapi/get_catalog_charts) | [`Create Apple Developer Token`](https://developer.apple.com/documentation/applemusicapi/getting_keys_and_creating_tokens)
 
 Consider the use of **Reinforcement Learning**; as time goes by, the model will learn to return more accurate predictions.
@@ -24,7 +24,7 @@ def predict_cpp(id):
     return predict(days)
 ```
 
-### HTTP Response
+### HTTP Response (`JSON`)
 ```json
  {
     "obj": [
@@ -61,7 +61,7 @@ Include a comparison of different machine learning models and their prediction m
 
 - Enrich dataframes with `Twitter API` requests, analyzed by the `Google Cloud Natural Language API` [1](https://cloud.google.com/natural-language) | [API](https://cloud.google.com/natural-language/docs/reference/rest/?apix=true) | [Languages supported](https://cloud.google.com/natural-language/docs/languages)
 
-### HTTP Response (Multiple models)
+### HTTP Response (Multiple models) (`JSON`)
 ```json
  {
     "obj": [
