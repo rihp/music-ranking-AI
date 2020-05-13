@@ -1,7 +1,10 @@
 # Artist ranking predictor.
 ## Supervised Machine Learning
 
-Using a time series of artist ranking, from established data sources like [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP) or [`Spotify API`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows).
+Using a time series of artist ranking, from established data sources like:
+- [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP)
+- [`Spotify API`](https://developer.spotify.com/documentation/general/guides/uthorization-guide/#authorization-flows)
+- [`iTunes Search Api`](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html#//apple_ref/doc/uid/TP40017632-CH8-SW1) | [`iTunes Music Charts`](https://developer.apple.com/documentation/applemusicapi/get_catalog_charts) | [`Create Apple Developer Token`](https://developer.apple.com/documentation/applemusicapi/getting_keys_and_creating_tokens)
 
 Consider the use of **Reinforcement Learning**; as time goes by, the model will learn to return more accurate predictions.
 
@@ -15,7 +18,7 @@ from flask import app
 from src.predictor import predict
 
 # Artist - Predict CPP (Cross-Platform Performance)
-@app.route(/api/artist/<id>/cpp-rank-prediction?days=4)
+@app.route(/api/artist/<id>/cpp-rank-prediction?days=2)
 def predict_cpp(id):
     days = get_params(days)
     return predict(days)
@@ -36,18 +39,6 @@ def predict_cpp(id):
             "predicted_rank": 3,
             "confidence":0.75 ,
             "timestp": "2019-06-08T07:00:00.000Z"
-        },
-        {
-            "spotify_id": 6970440,
-            "predicted_rank": 3,
-            "confidence":0.85 ,
-            "timestp": "2019-06-07T07:00:00.000Z"
-        },
-        {
-            "spotify_id": 6970440,
-            "predicted_rank": 1,
-            "confidence":0.65 ,
-            "timestp": "2019-06-06T07:00:00.000Z"
         }
     ]
 }
@@ -65,6 +56,7 @@ Considering only the ground truth, plot behavior of the artist ranking vector on
 
 ### More possible implementations:
 Include a comparison of different machine learning models and their prediction metrics.
+
 ![Prediction Models Compared](/INPUT/2013Ma_Sun_Cong.png)
 
 - Enrich dataframes with `Twitter API` requests, analyzed by the `Google Cloud Natural Language API` [1](https://cloud.google.com/natural-language) | [API](https://cloud.google.com/natural-language/docs/reference/rest/?apix=true) | [Languages supported](https://cloud.google.com/natural-language/docs/languages)
@@ -97,7 +89,8 @@ Include a comparison of different machine learning models and their prediction m
                         "timestp": "2019-06-06T07:00:00.000Z"
                         }       
                     ]  
-                }]
+                }
+            ]
         }
     ]
 }
