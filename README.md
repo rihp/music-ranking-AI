@@ -9,8 +9,9 @@
 
 Proposed data sources:
 - [`Chartmetric API`](https://api.chartmetric.com/apidoc/#api-Artist-GetArtistCPP)
-- [`Spotify API`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows) | [`Spotify Developer Access`](https://developer.spotify.com/) | [`Spotify Search`](https://developer.spotify.com/ | [`SDA ToS`]documentation/web-api/reference/search/search/)
+- [`Spotify API`](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows) | [`Spotify Developer Access`](https://developer.spotify.com/) | [`Spotify Search`](https://developer.spotify.com/) | [`SDA ToS`]documentation/web-api/reference/search/search/)
 - [`iTunes Search API`](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html#//apple_ref/doc/uid/TP40017632-CH8-SW1) | [`iTunes Music Charts`](https://developer.apple.com/documentation/applemusicapi/get_catalog_charts) | [`Create Apple Developer Token`](https://developer.apple.com/documentation/applemusicapi/getting_keys_and_creating_tokens) | [`iTunes MusicKit`](https://help.apple.com/developer-account/#/devce5522674)
+- [`Google Trends`](https://trends.google.com/trends/explore?date=today%205-y&geo=US&q=bad%20bunny)
 
 Consider the use of 
  - **Reinforcement Learning**; as time goes by, the model will learn to return more accurate predictions.
@@ -106,5 +107,6 @@ Include a comparison of different machine learning models and their prediction m
 
 ### Bonus (Exposure & Portfolio):
 - Send a tweet when a new prediction is made for an specified `artist_id`
-- Generate a docker image
-- Deploy to Heroku
+- Generate a docker image?
+- Deploy to Heroku?
+- Host portfolio

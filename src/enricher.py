@@ -4,6 +4,15 @@ from pymongo import MongoClient
 
 load_dotenv()
 
+####################################
+# SPOTIFY                          #
+####################################
+from src.config import SCID
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
+
 def get_artist_id(artist_id):
     pass
 
