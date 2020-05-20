@@ -20,10 +20,7 @@ print(f"Connected to MongoClient...  ")
 # -------------------------------------------------------- #
 #                    Handler functions                     #
 # -------------------------------------------------------- #
-def no_spaces(string):
-    return string.replace(' ', '_')
-
-def send_to_database(sf_data, predictions_json):
+def send_to_database(sf_data, predictions_json, metric=None):
     """
     Updates MongoAtlas with the new prediction
     """
@@ -39,12 +36,16 @@ def send_to_database(sf_data, predictions_json):
             'predictions': predictions_json
         }
 
+    if metric == 'spotify_monthly_listeners': coll = db.spotify_monthly_listeners
+    elif metric == 'cpp': coll = db.cpp
+
     try:
-        db.predictions.insert_one( doc ).inserted_id
+        coll.insert_one( doc ).inserted_id
     except DuplicateKeyError:
-        db.predictions.replace_one(
-                            # Replace this document
-                            { "_id" : sf_data['id'] },    
-                            # With this new document
-                            doc )
-    return {"message": f"sent item to atlas with _id:{sf_data['id']}"}
+        coll.replace_one(
+                    # Replace this document
+                    { "_id" : sf_data['id'] },    
+                    # With this new document
+                    doc )
+    
+    return {"message": f"sent {metric.upper()} to Mongo Atlas with _id:{sf_data['id']}"}

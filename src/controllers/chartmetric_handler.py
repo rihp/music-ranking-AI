@@ -61,18 +61,23 @@ def get_cm_artist_id(platform, platform_id):
         raise Exception('This platform has not yet been configured internally. Try using a `spotify_id`')
     return cm_artist_id
 
-def get_cpp_data(cm_artist_id, stat='rank', since=None, until=None):
+def get_cpp_data(cm_artist_id, qparams=None):
     """
     INPUT: query parameters
     OUTPUT: JSON with CPP datapoints
     """
-    print(f"{utils.isotime()} - Requesting Artist CPP data. ({stat=}, {since=}, {until=})")
-    if stat not in ("rank", "score"): raise Exception('Specified unvalid CPP stat.')
-    if (type(since) != str) or (type(until) != str): raise Exception("Use iso format 'YYYY-MM-DD'")
+    # Handle wrong qparams
+    if (type(qparams['since']) != str) or (type(qparams['until']) != str): raise ValueError("Use iso format 'YYYY-MM-DD'")
+    if qparams['stat']: stat = qparams['stat']
+    if stat not in ("rank", "score"): raise ValueError('Invalid CPP `stat`.')
+    
+
+    query_parameters = utils.format_qparams(qparams)
+    print(f"{utils.isotime()} - Requesting Artist CPP data. ({query_parameters})")
     
     # Configure Endpoint
     cm_headers = req_chartmetric_token()
-    endpoint = f"{cm_api_url}artist/{cm_artist_id}/cpp?stat={stat}&since={since}&until={until}"
+    endpoint = f"{cm_api_url}artist/{cm_artist_id}/cpp?{query_parameters}"
 
     # Make Request
     response = requests.get(endpoint, headers=cm_headers)
@@ -80,12 +85,26 @@ def get_cpp_data(cm_artist_id, stat='rank', since=None, until=None):
 
     return response.json()['obj']
 
-def get_daily_listeners(artist_id, start=None, end=None):
+def get_spotify_listeners(cm_artist_id, qparams=None):
     """
     Looks up an artist in the chartmetric database.
-    Converts the JSON response of all the historic values into a dataframe with a datetime index
+    JSON with Evolution of Spotify Listeneres
     """
-    return df
+    # Handle wrong qparams
+    if (type(qparams['since']) != str) or (type(qparams['until']) != str): raise ValueError("Use iso format 'YYYY-MM-DD'")
+
+    query_parameters = utils.format_qparams(qparams)
+    print(f"{utils.isotime()} - Requesting Artist's Evolution of Spotify Listeners. ({query_parameters})")
+    
+    # Configure Endpoint
+    cm_headers = req_chartmetric_token()
+    endpoint = f"{cm_api_url}artist/{cm_artist_id}/stat/spotify?{query_parameters}"
+
+    # Make Request
+    response = requests.get(endpoint, headers=cm_headers)
+    print(f"{utils.isotime()} - {response}")
+
+    return response.json()['obj']
 
 def get_spotify_ranking_history(artist_id, start=None, end=None):
     """
@@ -117,13 +136,24 @@ def get_spotify_ranking_history(artist_id, start=None, end=None):
 # -------------------------------------------------------- #
 #                 Query All Necessary Data                 #
 # -------------------------------------------------------- #
-def q_chartmetric(platform, platform_id, since=None, until=None):
+def q_chartmetric(platform, platform_id, since=None, until=None, metric=None):
     """
     INPUT: query params
     OUTPUT: dataframe with datetime index
     """
     cm_artist_id = get_cm_artist_id(platform, platform_id)
-    historic_data_arr = get_cpp_data(cm_artist_id, stat='rank', since=since, until=until)
+    if metric == 'cpp':
+        qparams = {"since":since, "until":until, "stat":"rank"}
+        historic_data_arr = get_cpp_data(cm_artist_id, qparams=qparams)
+
+    if metric == 'spotify_monthly_listeners':
+        qparams = { "since":since,
+                    "until":until,
+                    "field":"listeners",
+                    "interpolated":True}
+        # ♠ Optimization: This array contains dirty data (missing some data points)
+        ##                Consider interpolating the datapoints.     
+        historic_data_arr = get_spotify_listeners(cm_artist_id, qparams=qparams)['listeners']
     df = jsons_to_datetime_df(historic_data_arr)
     return df
 
@@ -140,8 +170,10 @@ def jsons_to_datetime_df(historic_data_arr):
     OUTPUT: dataframe with datetime index
     """
     rank_history = {}
+    print(historic_data_arr[0])
     for e in historic_data_arr:
-        rank_history.update({e['timestp']:e['rank']})
+        try: rank_history.update({e['timestp']:e['rank']})
+        except: rank_history.update({e['timestp']:e['value']})
     df = pd.DataFrame(rank_history.values(), index=rank_history.keys())
     df.index = pd.to_datetime(df.index)
     return df
