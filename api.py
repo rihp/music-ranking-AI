@@ -1,7 +1,8 @@
 import os
 import pandas as pd
+import numpy as np
 from datetime import date
-from flask import Flask, request, app
+from flask import Flask, request, app, render_template
 
 # My modules:
 from src.config import PORT
@@ -59,10 +60,40 @@ def artist_report(artist_id, metric):
     Displays available data as a basic HTML UI
     Sends a tweet with the generated report
     """
+    #doc = mah.lookup_in_database(artist_id, metric=metric)
     doc = mah.lookup_in_database(artist_id, metric=metric)
+    try:
+        preds = doc['predictions']
+        x_labels = [ e['timestp'] for e in preds]
+        y_values = [ e['rank'] for e in preds]
+        return render_template('main.html',
+                            nvalues=y_values,
+                            nlabels=x_labels,
+                            ncolor='rgba(50, 115, 220, 0.4)')
+    except: return doc
+    #return {"doc":doc,             "x_labels":x_labels,             "y_labels":y_values}
 
-    return {"message":"app under development",
-            "report":doc
-            }
+@app.route("/api/chart")
+def sample_report():
+    n, bins = 10000, 20
+    normal = np.random.normal(0, 1, n)
+    gumbel = np.random.gumbel(0, 1, n)
+    weibull = np.random.weibull(5, n)
+    nhistogram = np.histogram(normal, bins=bins)
+    ghistogram = np.histogram(gumbel, bins=bins)
+    whistogram = np.histogram(weibull, bins=bins)
+
+    return render_template('main.html',
+                            nvalues=nhistogram[0].tolist(),
+                            nlabels=nhistogram[1].tolist(),
+                            ncolor='rgba(50, 115, 220, 0.4)',
+                            gvalues=ghistogram[0].tolist(),
+                            glabels=ghistogram[1].tolist(),
+                            gcolor='rgba(0, 205, 175, 0.4)',
+                            wvalues=whistogram[0].tolist(),
+                            wlabels=whistogram[1].tolist(),
+                            wcolor='rgba(255, 56, 96, 0.4)')
+
+
 
 app.run(host="0.0.0.0", port=PORT, debug=True)
