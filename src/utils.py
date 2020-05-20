@@ -13,8 +13,9 @@ def makesound(sound_key):
     display(Audio(url=sounds[sound_key], autoplay=True))
 
 
-def isotime():
-    return f"[{datetime.datetime.today().isoformat(timespec='minutes')}]"
+def isotime(brackets=True):
+    if brackets:  return f"[{datetime.datetime.today().isoformat(timespec='minutes')}]"
+    else:         return datetime.datetime.today().isoformat(timespec='minutes')
 
 def new_high_score():
     print(f"{isotime()} - \n  QUICK! MORTY! GET THE LASER GUN MORTY!\n THE MACHINE HAS LEARNED TO GENERALIZE")

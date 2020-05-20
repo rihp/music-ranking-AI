@@ -31,7 +31,7 @@ def send_to_database(artist_id, predictions_json):
     doc  = {# ♠ Optimization: Use BSON ObjectId - https://api.mongodb.com/python/current/api/bson/objectid.html                
             '_id':artist_id,
             'name':"ARTIST NAME HERE",
-            'generated': utils.isotime(),
+            'generated': utils.isotime(brackets=False),
             'predictions': predictions_json
         }
 
