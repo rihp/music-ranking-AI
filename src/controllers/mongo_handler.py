@@ -23,15 +23,19 @@ print(f"Connected to MongoClient...  ")
 def no_spaces(string):
     return string.replace(' ', '_')
 
-def send_to_database(artist_id, predictions_json):
+def send_to_database(sf_data, predictions_json):
     """
     Updates MongoAtlas with the new prediction
     """
     # Prepare the doc to be sent
     doc  = {# ♠ Optimization: Use BSON ObjectId - https://api.mongodb.com/python/current/api/bson/objectid.html                
-            '_id':artist_id,
-            'name':"ARTIST NAME HERE",
-            'generated': utils.isotime(brackets=False),
+            '_id':sf_data['id'],
+            'name':sf_data['name'],
+            'last_update': utils.isotime(brackets=False),
+            'followers':sf_data['followers'],
+            'genres':sf_data['genres'],
+            'images':sf_data['images'],
+            'popularity':sf_data['popularity'],
             'predictions': predictions_json
         }
 
@@ -40,7 +44,7 @@ def send_to_database(artist_id, predictions_json):
     except DuplicateKeyError:
         db.predictions.replace_one(
                             # Replace this document
-                            { "_id" : artist_id },    
+                            { "_id" : sf_data['id'] },    
                             # With this new document
                             doc )
-    return {"message": f"sent item to atlas with _id:{artist_id}"}
+    return {"message": f"sent item to atlas with _id:{sf_data['id']}"}
