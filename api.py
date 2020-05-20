@@ -11,7 +11,7 @@ from src.controllers import spotify_handler as sfh
 from src.predictor import predict, predictions_to_json
 
 # Request data since this date
-since="2020-01-01"
+since="2018-01-01"
 
 # FLASK SETUP
 app = Flask(__name__)
@@ -33,7 +33,7 @@ def predict_artist_metric(spotify_artist_id, metric, n_periods=30, since=since, 
     sf_data = sfh.q_spotify(spotify_artist_id)                                      # Present data about the artist
     cm_data = cmh.q_chartmetric(platform, spotify_artist_id, **query_params)        # Historic data about the artist
     df = cm_data.copy()    
-    # 2. Generate prediction with ARIMA
+    # 2. Generate prediction with the defined models
     pred_df = predict(df, n_periods=n_periods)
     # 3. Send time-series prediction to Mongo Atlas
     preds_json = list(predictions_to_json(pred_df, until))
@@ -41,23 +41,28 @@ def predict_artist_metric(spotify_artist_id, metric, n_periods=30, since=since, 
     message = mah.send_to_database(sf_data, preds_json, metric=metric)
     return message
 
-@app.route("/api/<artist_id>/lookup")
-def artist_lookup(artist_id):
+@app.route("/api/artist/<artist_id>/lookup/<metric>")
+def artist_lookup(artist_id, metric):
     """
     Query in MongoAtlas the predictions for the specified artist_id
     Look for recent news and other relevant (PRESENT) data. 
     Return data as a JSON
     """
-    return {"message":"app under development"}
+    doc = mah.lookup_in_database(artist_id, metric=metric)
+    return doc
 
-@app.route("/api/<artist_id>/report")
-def artist_report(artist_id):
+@app.route("/api/artist/<artist_id>/report/<metric>")
+def artist_report(artist_id, metric):
     """
     Uses the `artist_lookup` endpoint  to leverage on the JSON response
     Draws a group of matplotlib graphs
     Displays available data as a basic HTML UI
     Sends a tweet with the generated report
     """
-    return {"message":"app under development"}
+    doc = mah.lookup_in_database(artist_id, metric=metric)
+
+    return {"message":"app under development",
+            "report":doc
+            }
 
 app.run(host="0.0.0.0", port=PORT, debug=True)

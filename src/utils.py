@@ -7,7 +7,7 @@ from scipy import signal
 #   Welcome to my toolbox; 
 #   
 #   I hope this tiny scripts help you develop your own 
-# projects. This module is intended to be verstile and easy
+# projects. This module is intended to be versatile and easy
 # to use.
 
 # -------------------------------------------------------- #
