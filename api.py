@@ -41,34 +41,6 @@ def predict_artist_metric(spotify_artist_id, metric, n_periods=30, since=since, 
     message = mah.send_to_database(sf_data, preds_json, metric=metric)
     return message
 
-@app.route("/api/artist/<spotify_artist_id>/predict")
-def predict_artist(spotify_artist_id, n_periods=30, since="2020-01-01", until=date.today().isoformat()):
-    """
-    Input:  A dataframe with a datetime index and the number of periods to predict
-    Output: The `_id` of the created document in Mongo Atlas
-    """
-    platform = 'spotify'       # The base artist ids we use to identify all artists
-
-# 1. Query Available data for the specified `artist_id` in all external data sources. 
-    query_params = { "since":since, "until":until }
-    
-    # Prepare present data about the artist
-    sf_data = sfh.q_spotify(spotify_artist_id)
-
-    # Prepare historic data about the artist
-    cm_data = cmh.q_chartmetric(platform, spotify_artist_id, **query_params)
-    df = cm_data.copy()    
-
-    #df = pd.concatenate((chartmetric_data,spotify_data, trends_data), axis=1)
-# 2. Generate prediction with ARIMA
-    pred_df = predict(df, n_periods=n_periods)
-
-# 3. Send time-series prediction to Mongo Atlas
-    preds_json = list(predictions_to_json(pred_df, until))
-
-    message = mah.send_to_database(sf_data, preds_json)
-    return message
-
 @app.route("/api/<artist_id>/lookup")
 def artist_lookup(artist_id):
     """
