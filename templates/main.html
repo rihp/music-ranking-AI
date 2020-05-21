@@ -17,15 +17,24 @@
 		<div class="row">
 			<div id="content" class="col-lg-3">
 				Container Left
-
-				<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-				<script>
-				  document.getElementById('content').innerHTML =
-					marked('# Marked in the browser\n\nRendered by **marked**.');
-				</script>				
-				</object>
 				<div id="settings-object"></div>
+
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
+				<script src="github-embed.min.js"></script>
+				<script>
+					githubEmbed('#settings-object', {
+						"owner": "rihp",
+						"repo": "music-ranking-AI",
+						"ref": "master",
+						"embed": [{
+							"path": "api.py"
+						}, {
+							"path": "README.md"
+						}]
+					});
+				</script>
 			</div>
+			
 			<div class="col-lg-9">
 				<h1 class="title">
 					The Music Oracle
