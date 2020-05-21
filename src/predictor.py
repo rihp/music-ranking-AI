@@ -23,8 +23,12 @@ def predict(df, n_periods=None, seasonality=None, fft=True):
         print('The model has not been trained before, so we will use auto_arima to train it again')
     """ 
     # Cleaning the noisy signal, using a Fourier Transform / Butterworth Fitler
-    if fft: clean_df = clean_signal(df, Fm=365, Fc=7)
+    if fft: clean_df = clean_signal(df, Fm=30, Fc=7)
     else:   clean_df = df.copy()
+
+    clean_df.sort_index(inplace=True)
+    print(f"{clean_df.head()=}")
+
     # Train the model
     model_params ={"random_state":True, "suppress_warnings":True, "trace":True, "error_action":'ignore'}
     trained_model = pm.auto_arima(clean_df,    # Data to fit to
@@ -37,9 +41,10 @@ def predict(df, n_periods=None, seasonality=None, fft=True):
     with open(f'{config.OUTPUT_models_trained_path}_CPP.pkl', 'wb') as pkl:
         pickle.dump(trained_model, pkl)
     """
-
     # Make a prediction.
     pred_df = trained_model.predict(n_periods=n_periods).round()
+    print(f"{pred_df[0]=}")
+
     return clean_df, pred_df
 
 # -------------------------------------------------------- #
