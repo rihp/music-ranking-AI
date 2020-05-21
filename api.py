@@ -39,7 +39,8 @@ def predict_artist_metric(spotify_artist_id, metric, n_periods=15, seasonality=7
     df = cm_data.copy()    
 
     # 2. Generate prediction and cleaned data with the defined models
-    clean_df, pred_df = predict(df, n_periods=n_periods, seasonality=seasonality, fft=True)
+    clean_df, pred_df = predict(df, n_periods=n_periods, seasonality=seasonality,
+                                 fft=True, metric=metric)
     
     # 3. Send both time-series (hist and pred) to Mongo Atlas
     historic_json = list(clean_df_to_json(clean_df))

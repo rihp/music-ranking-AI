@@ -7,7 +7,7 @@ from src.controllers import spotify_handler, chartmetric_handler
 # -------------------------------------------------------- #
 #                Machine Learning Models                   #
 # -------------------------------------------------------- #
-def predict(df, n_periods=None, seasonality=None, fft=True):
+def predict(df, n_periods=None, seasonality=None, fft=True, metric=None):
     """
     INPUT: A dataframe with a datetime index
     OUTPUT: The prediction, as a new dataframe with a datetime index
@@ -43,17 +43,22 @@ def predict(df, n_periods=None, seasonality=None, fft=True):
     """
     # Make a prediction.
     pred_df = trained_model.predict(n_periods=n_periods).round()
-    print(f"{pred_df[0]=}")
+    
+    if metric == 'cpp':
+        #no_negative_rankings = lambda y : 1 if y < 1 else y
+        pred_df = [ 1 if e < 1 else e for e in pred_df]
 
     return clean_df, pred_df
 
 # -------------------------------------------------------- #
 #                    Transforming Data                     #
 # -------------------------------------------------------- #
+
 def predictions_to_json(preds_array, date_end):
     tmstp = datetime.date.fromisoformat(date_end)
     for value in preds_array:
         tmstp += datetime.timedelta(days=1)
+        
         yield {"x": tmstp.isoformat()[:10],
                "y": int(value),}
 
