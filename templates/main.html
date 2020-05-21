@@ -16,21 +16,31 @@
     <div class="container-fluid">
 		<div class="row">
 	
-			<div class="col-lg-9">
-				<div class="media-left">
-					<figure class="image is-128x128">
-						<img class="is-rounded" src="/INPUT/riseUP_logo.png" alt="Image">
-					</figure>
-				</div>
-				<h1 class="title">
-					The Music Oracle
-				</h1>
-				<p class="subtitle">
-					Can we use <strong>Machine learning</strong> to predict the future performance of an artist? 
-					<br>
-					<small> This <strong>RESFUL API</strong> uses <strong>Supervised Machine Learning</strong> to generate a prediction. The generated datapoints are sent to a <strong>Mongo Atlas</strong> server, which are later fetched by <strong>Flask</strong> and returned as a <strong>JSON</strong>. 
-					<br>The chart below <strong>Chart.js</strong> template.</small>
-				</p>
+			<div class="col-lg-4">
+				<article class="media">
+					<div class="media-left">
+						<figure class="image is-128x128">
+							<img class="is-rounded" src="https://raw.githubusercontent.com/rihp/music-ranking-AI/html-dev/INPUT/riseUP_logo.png" alt="Image">
+						</figure>
+					
+						<h1 class="title">
+							RiseUP
+						</h1>
+					</div>
+					<div id="content" class="col-lg-4">
+					<p class="subtitle">
+						Can we use <strong>Machine learning</strong> to predict the future performance of an artist? 
+					</p>
+					</div>
+					<div id="content" class="col-lg-4">
+						<small> 🎹️ This <strong>API</strong> uses <strong>Supervised Machine Learning</strong> to generate a prediction. The generated datapoints are sent to a <strong>Mongo Atlas</strong> server, which are later fetched by <strong>Flask</strong> and returned as a <strong>							<a class="level-item" href="localhost:5007/api/artist/{{ a_id }}/lookup/{{ metric }}">
+								JSON</a></strong>. 
+						<br> The chart below was built with a <strong>Chart.js</strong> template.</small>
+					</div>
+
+				</article>
+
+
 
 				<div class="box">
 					<div class="container">
@@ -78,8 +88,8 @@
 			</div>
 			</div>
 
-			<div id="content" class="col-lg-3">
-				Container Left
+			<div id="content" class="col-lg-4">
+				Want to read the code ? Check over here.
 				<div id="settings-object"></div>
 
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
@@ -91,9 +101,9 @@
 						"repo": "music-ranking-AI",
 						"ref": "html-dev",
 						"embed": [{
-							"path": "api.py"
-						}, {
 							"path": "README.md"
+						}, {
+							"path": "api.py"
 						}]
 					});
 				</script>

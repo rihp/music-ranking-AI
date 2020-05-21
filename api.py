@@ -71,6 +71,7 @@ def artist_report(artist_id, metric):
     doc = mah.lookup_in_database(artist_id, metric=metric)
     
     try:
+        a_id = artist_id
         a_img = doc['images'][0]['url']
         a_name = doc['name']
         a_genres = ' - '.join([ hashtag(e) for e in doc['genres']])
@@ -78,8 +79,8 @@ def artist_report(artist_id, metric):
         a_followers = doc['followers']['total']
         a_href = doc['spotify_href']
         a_updated = doc['last_update'][:10]
-        dynamic_vars = {"a_img":a_img, "a_name":a_name, "a_genres": a_genres, "a_popularity":a_popularity,
-                        "a_followers":a_followers, "a_href":a_href, "a_updated":a_updated}
+        dynamic_vars = {"a_id":a_id, "a_img":a_img, "a_name":a_name, "a_genres": a_genres, "a_popularity":a_popularity,
+                        "a_followers":a_followers, "a_href":a_href, "a_updated":a_updated, "metric":metric}
 
         chart_title = metric.replace('_', ' ').title()
         check = (doc['past_data'][0], doc['past_data'][0])
