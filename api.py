@@ -10,6 +10,7 @@ from src.config import PORT
 from src.controllers import mongo_handler as mah
 from src.controllers import chartmetric_handler as cmh
 from src.controllers import spotify_handler as sfh
+from src.controllers import twitter_handler as twh
 from src.predictor import predict, predictions_to_json, clean_df_to_json
 
 # Request data since this date
@@ -74,18 +75,20 @@ def artist_report(artist_id, metric):
         a_id = artist_id
         a_img = doc['images'][0]['url']
         a_name = doc['name']
-        a_genres = ' - '.join([ hashtag(e) for e in doc['genres']])
         a_popularity = doc['popularity']
         a_followers = doc['followers']['total']
         a_href = doc['spotify_href']
         a_updated = doc['last_update'][:10]
+        a_genres = ' - '.join([ hashtag(e) for e in doc['genres']])
+        a_tweets = twh.ticker_tweets(a_name, 'album')
+
         dynamic_vars = {"a_id":a_id, "a_img":a_img, "a_name":a_name, "a_genres": a_genres, "a_popularity":a_popularity,
-                        "a_followers":a_followers, "a_href":a_href, "a_updated":a_updated, "metric":metric}
+                        "a_tweets":a_tweets, "a_followers":a_followers, "a_href":a_href, "a_updated":a_updated, "metric":metric}
 
         chart_title = metric.replace('_', ' ').title()
-        check = (doc['past_data'][0], doc['past_data'][0])
+        check = a_tweets
         print(type(check), check)
-
+        
         past_data = doc['past_data']
         pred_data = doc['predictions']
         

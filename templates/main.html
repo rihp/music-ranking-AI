@@ -3,31 +3,33 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>The Music Oracle</title>
+	<title>The Music Oracle</title>
+
+
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/ticker.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
 	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js" integrity="sha256-xKeoJ50pzbUGkpQxDYHD7o7hxe0LaOGeguUidbq6vis=" crossorigin="anonymous"></script>
-	<link rel="icon" type="image/png" href="favico goes here">
+	<link rel="icon" type="image/png" href="{{ url_for('INPUT', filename='favicon.png') }}">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	
+
   </head>
   <body>
   <section class="section">
     <div class="container-fluid">
 		<div class="row">
 	
-			<div class="col-lg-4">
+			<div class="col-lg-8">
 				<article class="media">
 					<div class="media-left">
 						<figure class="image is-128x128">
-							<img class="is-rounded" src="https://raw.githubusercontent.com/rihp/music-ranking-AI/html-dev/INPUT/riseUP_logo.png" alt="RiseUP Logo">
+							<img src="https://raw.githubusercontent.com/rihp/music-ranking-AI/html-dev/INPUT/riseUP_logo.jpeg" alt="RiseUP Logo">
 						</figure>
-					
+					</div>
+					<div id="content" class="col-lg-4">
 						<h1 class="title">
 							RiseUP
 						</h1>
-					</div>
-					<div id="content" class="col-lg-4">
 					<p class="subtitle">
 						Can we use <strong>Machine learning</strong> to predict the future performance of an artist? 
 					</p>
@@ -63,6 +65,10 @@
 							
 							<small>Updated: {{ a_updated }}</small>
 							</p>
+							<div class="my_ticker">
+								<p><strong>Live tweets:</strong></p>
+								<p class="marquee"><span>{{ a_tweets }}</span></p>
+							</div>	
 						</div>
 						<nav class="level is-mobile">
 							<div class="level-left">
@@ -83,6 +89,12 @@
 							</a>
 							</div>
 						</nav>
+
+
+
+
+
+
 					</div>
 				</article>
 			</div>
