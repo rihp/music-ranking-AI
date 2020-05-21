@@ -15,27 +15,7 @@
   <section class="section">
     <div class="container-fluid">
 		<div class="row">
-			<div id="content" class="col-lg-3">
-				Container Left
-				<div id="settings-object"></div>
-
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
-				<!-- do not do this on production -->
-				<script src="https://finom.github.io/github-embed/github-embed.min.js"></script>
-				<script>
-					githubEmbed('#settings-object', {
-						"owner": "rihp",
-						"repo": "music-ranking-AI",
-						"ref": "html-dev",
-						"embed": [{
-							"path": "api.py"
-						}, {
-							"path": "README.md"
-						}]
-					});
-				</script>
-			</div>
-			
+	
 			<div class="col-lg-9">
 				<div class="media-left">
 					<figure class="image is-128x128">
@@ -96,7 +76,28 @@
 					</div>
 				</article>
 			</div>
-		</div>
+			</div>
+
+			<div id="content" class="col-lg-3">
+				Container Left
+				<div id="settings-object"></div>
+
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
+				<!-- do not do this on production -->
+				<script src="https://finom.github.io/github-embed/github-embed.min.js"></script>
+				<script>
+					githubEmbed('#settings-object', {
+						"owner": "rihp",
+						"repo": "music-ranking-AI",
+						"ref": "html-dev",
+						"embed": [{
+							"path": "api.py"
+						}, {
+							"path": "README.md"
+						}]
+					});
+				</script>
+			</div>
 	</div>
   </section>
 
