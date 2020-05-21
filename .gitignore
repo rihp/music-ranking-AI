@@ -131,3 +131,4 @@ dmypy.json
 
 # RIHP CUSTOM IGNORES
 Legal/
+__tests__/

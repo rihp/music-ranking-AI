@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Probability Distributions</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+	<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js" integrity="sha256-xKeoJ50pzbUGkpQxDYHD7o7hxe0LaOGeguUidbq6vis=" crossorigin="anonymous"></script>
+	<link rel="icon" type="image/png" href="https://bulma.io/favicons/favicon-32x32.png?v=201701041855">
+  </head>
+  <body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        The Music Oracle
+      </h1>
+      <p class="subtitle">
+		Can we use <strong>Machine learning</strong> to predict the future performance of an artist? 
+		<br>
+		This API uses <strong>Supervised Machine Learning</strong> to generate a prediction, and <strong>Flask</strong> to serve de predicted data to any user. The chart below was chart was made by customizing a <strong>Chart.js</strong> template!
+	  </p>
+
+	  <div class="box">
+		<div class="container">
+			<canvas id="chartCanvas"></canvas>
+			<br>
+		</div>
+		<article class="media">
+			<div class="media-left">
+			<figure class="image is-128x128">
+				<img class="is-rounded" src="{{ a_img }}" alt="Image">
+			</figure>
+			</div>
+			<div class="media-content">
+			<div class="content">
+				<p>
+				<large><strong>{{ a_name }}</strong></large>      |      Followers: {{ a_followers }}				
+				<br>
+				<small><strong>Popularity</strong>: {{ a_popularity }}/100  |   <strong>Genres</strong>: {{ a_genres }}   </small> 
+				<br>
+				
+				<small>Updated: {{ a_updated }}</small>
+				</p>
+			</div>
+			<nav class="level is-mobile">
+				<div class="level-left">
+				<a class="level-item" href="https://github.com/rihp">
+					<span class="icon is-small">
+						<i class="fab fa-github"></i>
+					</span>
+				</a>
+				<a class="level-item" href="https://henriquezperozo.com/rihp">
+					<span class="icon is-small">
+					<i class="fas fa-globe" aria-hidden="true"></i>
+					</span>
+				</a>
+				<a class="level-item" href="{{ a_href }}">
+					<span class="icon is-small">
+					<i class="fab fa-spotify" aria-hidden="true"></i>
+					</span>
+				</a>
+				</div>
+			</nav>
+			</div>
+		</article>
+		</div>
+  </section>
+
+  <script>
+	  var ctx = document.getElementById('chartCanvas').getContext('2d');
+	  var past_data = {{ past_data|tojson|safe }}
+	  var pred_data = {{ pred_data|tojson|safe }}
+	  console.log(pred_data)
+	  var chart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				datasets: [{
+					label: 'Historic data',
+					data: past_data,
+					backgroundColor: '{{ ncolor }}',
+					borderColor: '{{ ncolor }}',
+					borderWidth: 2,
+					fill: true,
+					pointBorderWidth: 1,
+					pointHoverRadius: 5,
+					pointHoverBackgroundColor: '{{ ncolor }}',
+					pointHoverBorderColor: '{{ ncolor }}',
+					pointHoverBorderWidth: 2,
+					pointRadius: 1,
+					pointHitRadius: 10
+				},
+				{
+					label: 'Prediction',
+					data: pred_data,   
+					backgroundColor: '{{ gcolor }}',
+					borderColor: '{{ gcolor }}',
+					borderWidth: 2,
+					fill: true,
+					pointBorderWidth: 1,
+					pointHoverRadius: 5,
+					pointHoverBackgroundColor: '{{ gcolor }}',
+					pointHoverBorderColor: '{{ gcolor }}',
+					pointHoverBorderWidth: 2,
+					pointRadius: 1,
+					pointHitRadius: 10,
+				}
+
+			]
+			},
+			options: {
+				title: {
+         		    display: true,
+					text: "{{ chart_title }}",
+					fontSize: 18 
+		        },
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}],
+					xAxes: [{
+        				type: 'time'
+      				}]
+				}
+			}
+		});
+  </script>
+  </body>
+</html>

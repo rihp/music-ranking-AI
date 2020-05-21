@@ -69,7 +69,7 @@ def artist_report(artist_id, metric):
     """
     #doc = mah.lookup_in_database(artist_id, metric=metric)
     doc = mah.lookup_in_database(artist_id, metric=metric)
-
+    
     try:
         a_img = doc['images'][0]['url']
         a_name = doc['name']
@@ -80,7 +80,8 @@ def artist_report(artist_id, metric):
         a_updated = doc['last_update'][:10]
         dynamic_vars = {"a_img":a_img, "a_name":a_name, "a_genres": a_genres, "a_popularity":a_popularity,
                         "a_followers":a_followers, "a_href":a_href, "a_updated":a_updated}
-        
+
+        chart_title = f"{a_name}`s {metric.replace('_', ' ').upper()}"
         check = (doc['past_data'][0], doc['past_data'][0])
         print(type(check), check)
 
@@ -102,7 +103,7 @@ def artist_report(artist_id, metric):
                             #all_labels=all_labels,
                             past_data=past_data,
                             pred_data=pred_data,
-                            
+                            chart_title=chart_title,
                             ncolor='rgba(50, 115, 220, 0.4)',
                             gcolor='rgba(0, 205, 175, 0.4)')               
     except Exception as e:
