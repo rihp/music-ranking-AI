@@ -1,10 +1,11 @@
-import os
+import os, json
 import pandas as pd
 import numpy as np
 from datetime import date
 from flask import Flask, request, app, render_template
 
 # My modules:
+from src.utils import hashtag
 from src.config import PORT
 from src.controllers import mongo_handler as mah
 from src.controllers import chartmetric_handler as cmh
@@ -71,38 +72,48 @@ def artist_report(artist_id, metric):
     try:
         a_img = doc['images'][0]['url']
         a_name = doc['name']
-        a_genres = ' | '.join(doc['genres'])
+        a_genres = ' - '.join([ hashtag(e) for e in doc['genres']])
         a_popularity = doc['popularity']
         a_followers = doc['followers']['total']
         a_href = doc['spotify_href']
-        a_updated = doc['last_update']
+        a_updated = doc['last_update'][:10]
         dynamic_vars = {"a_img":a_img, "a_name":a_name, "a_genres": a_genres, "a_popularity":a_popularity,
                         "a_followers":a_followers, "a_href":a_href, "a_updated":a_updated}
         
-        check = doc['past_data'][0]['timestp'][:10]
+        check = [json.dumps(e) for e in doc['past_data']]
         print(type(check))
         print(check)
-
-        past_x = [ date.fromisoformat(e['timestp'][:10]) for e in doc['past_data']]
+        """
+        past_x = [ date.fromisoformat(e['timestp'][:10]) for e in ]
         past_y = [ e['value']   for e in doc['past_data']]
         pred_x = [ date.fromisoformat(e['timestp'][:10]) for e in doc['predictions']]
         pred_y = [ e['value']   for e in doc['predictions']]
         all_labels= past_x + pred_x
-        print( all_labels)
+        """
+        """
+        past_data = [json.dumps(e) for e in doc['past_data']]
+        pred_data = [json.dumps(e) for e in doc['predictions']]
+        """
+        past_data = doc['past_data']
+        pred_data = doc['predictions']
+
+
         # Invert `y` axis for Cross platform performance
+        """        
         if metric == "cpp":
             print(pred_y)
             pred_y = [ e*-1 for e in pred_y]
             print(pred_y)
-            past_y = [ e*-1 for e in past_y]
+            past_y = [ e*-1 for e in past_y]"""
 
         return render_template('main.html',
                             # Artist Metadata
                             **dynamic_vars,
                             # Graph Datapoints
-                            all_labels=all_labels,
-                            past_y=past_y,
-                            pred_y=pred_y,
+                            #all_labels=all_labels,
+                            past_data=past_data,
+                            pred_data=pred_data,
+                            
                             ncolor='rgba(50, 115, 220, 0.4)',
                             gcolor='rgba(0, 205, 175, 0.4)')               
     except Exception as e:

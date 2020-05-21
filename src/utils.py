@@ -42,6 +42,10 @@ def format_qparams(qparams):
 def no_spaces(string):
     return string.replace(' ', '_')
 
+def hashtag(string):
+    hashtag = "#"+ no_spaces(string)
+    return hashtag
+
 # -------------------------------------------------------- #
 #                        Sounds                            #
 # -------------------------------------------------------- #

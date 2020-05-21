@@ -49,15 +49,15 @@ def predictions_to_json(preds_array, date_end):
     tmstp = datetime.date.fromisoformat(date_end)
     for value in preds_array:
         tmstp += datetime.timedelta(days=1)
-        yield {"value": int(value),
-               "timestp": tmstp.isoformat()}
+        yield {"x": tmstp.isoformat()[:10],
+               "y": int(value),}
 
 def clean_df_to_json(clean_df):
     try:
         for tmstp, value in clean_df.iterrows():
-            yield {"value": int(value),
-                "timestp": tmstp.isoformat()}
+            yield {"x": tmstp.isoformat()[:10],
+                   "y": int(value),}
     except:
         for tmstp, value in clean_df.iteritems():
-            yield {"value": int(value),
-                "timestp": tmstp.isoformat()}
+            yield {"x": tmstp.isoformat()[:10],
+                   "y": int(value),}
