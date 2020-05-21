@@ -20,12 +20,13 @@
 				<div id="settings-object"></div>
 
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.23.0/polyfill.min.js"></script>
-				<script src="github-embed.min.js"></script>
+				<!-- do not do this on production -->
+				<script src="https://finom.github.io/github-embed/github-embed.min.js"></script>
 				<script>
 					githubEmbed('#settings-object', {
 						"owner": "rihp",
 						"repo": "music-ranking-AI",
-						"ref": "master",
+						"ref": "html-dev",
 						"embed": [{
 							"path": "api.py"
 						}, {
