@@ -23,7 +23,7 @@ def predict(df, n_periods=None, seasonality=None, fft=True, metric=None):
         print('The model has not been trained before, so we will use auto_arima to train it again')
     """ 
     # Cleaning the noisy signal, using a Fourier Transform / Butterworth Fitler
-    if fft: clean_df = clean_signal(df, Fm=30, Fc=7)
+    if fft: clean_df = clean_signal(df, Fm=365, Fc=7)
     else:   clean_df = df.copy()
 
     clean_df.sort_index(inplace=True)

@@ -13,7 +13,7 @@ from src.controllers import spotify_handler as sfh
 from src.predictor import predict, predictions_to_json, clean_df_to_json
 
 # Request data since this date
-since="2019-02-01"
+since="2018-01-01"
 
 # FLASK SETUP
 app = Flask(__name__)
@@ -25,7 +25,7 @@ def landing_page():
     f'Hello, world! Welcome to my Music Prediction API.'}
 
 @app.route("/api/artist/<spotify_artist_id>/predict/<metric>")
-def predict_artist_metric(spotify_artist_id, metric, n_periods=15, seasonality=7, since=since,
+def predict_artist_metric(spotify_artist_id, metric, n_periods=30, seasonality=7, since=since,
                          until=date.today().isoformat(), platform = 'spotify'):
     """
     Versatile prediction endpoint for a given artist_id and metric.
