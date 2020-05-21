@@ -81,7 +81,7 @@ def artist_report(artist_id, metric):
         dynamic_vars = {"a_img":a_img, "a_name":a_name, "a_genres": a_genres, "a_popularity":a_popularity,
                         "a_followers":a_followers, "a_href":a_href, "a_updated":a_updated}
 
-        chart_title = f"{a_name}`s {metric.replace('_', ' ').upper()}"
+        chart_title = metric.replace('_', ' ').title()
         check = (doc['past_data'][0], doc['past_data'][0])
         print(type(check), check)
 

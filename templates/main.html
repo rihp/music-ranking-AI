@@ -18,7 +18,8 @@
       <p class="subtitle">
 		Can we use <strong>Machine learning</strong> to predict the future performance of an artist? 
 		<br>
-		This API uses <strong>Supervised Machine Learning</strong> to generate a prediction, and <strong>Flask</strong> to serve de predicted data to any user. The chart below was chart was made by customizing a <strong>Chart.js</strong> template!
+		<small> This <strong>RESFUL API</strong> uses <strong>Supervised Machine Learning</strong> to generate a prediction. The generated datapoints are sent to a <strong>Mongo Atlas</strong> server, which are later fetched by <strong>Flask</strong> and returned as a <strong>JSON</strong>. 
+		<br>The chart below <strong>Chart.js</strong> template.</small>
 	  </p>
 
 	  <div class="box">
@@ -112,7 +113,7 @@
 				title: {
          		    display: true,
 					text: "{{ chart_title }}",
-					fontSize: 18 
+					fontSize: 28 
 		        },
 				scales: {
 					yAxes: [{
