@@ -20,7 +20,7 @@ print(f"Connected to MongoClient...  ")
 # -------------------------------------------------------- #
 #                    Handler functions                     #
 # -------------------------------------------------------- #
-def send_to_database(sf_data, predictions_json, metric=None):
+def send_to_database(sf_data, historic_json, predictions_json, metric=None):
     """
     Updates MongoAtlas with the new prediction
     """
@@ -28,13 +28,15 @@ def send_to_database(sf_data, predictions_json, metric=None):
 
     # Format the document to be sent
     doc  = {# ♠ Optimization: Use BSON ObjectId - https://api.mongodb.com/python/current/api/bson/objectid.html                
-            '_id':sf_data['id'],
+            '_id':sf_id,
             'name':sf_data['name'],
             'last_update': utils.isotime(brackets=False),
             'followers':sf_data['followers'],
             'genres':sf_data['genres'],
             'images':sf_data['images'],
             'popularity':sf_data['popularity'],
+            'spotify_href':sf_data['external_urls']['spotify'],
+            'past_data':historic_json,
             'predictions': predictions_json
         }
 

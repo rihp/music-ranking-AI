@@ -7,7 +7,7 @@ from src.controllers import spotify_handler, chartmetric_handler
 # -------------------------------------------------------- #
 #                Machine Learning Models                   #
 # -------------------------------------------------------- #
-def predict(df, n_periods=30):
+def predict(df, n_periods=None, seasonality=None, fft=True):
     """
     INPUT: A dataframe with a datetime index
     OUTPUT: The prediction, as a new dataframe with a datetime index
@@ -22,14 +22,15 @@ def predict(df, n_periods=30):
     except:
         print('The model has not been trained before, so we will use auto_arima to train it again')
     """ 
-    # Clean the noisy signal, using a Fourier Transform / Butterworth Fitler
-    #df_cleaned = clean_signal(df, Fm=365, Fc=7)
-    df_cleaned = df.copy()
+    # Cleaning the noisy signal, using a Fourier Transform / Butterworth Fitler
+    if fft: clean_df = clean_signal(df, Fm=365, Fc=7)
+    else:   clean_df = df.copy()
     # Train the model
     model_params ={"random_state":True, "suppress_warnings":True, "trace":True, "error_action":'ignore'}
-    trained_model = pm.auto_arima(df_cleaned, # Data to fit to
-                        seasonal=True, m=7,   # Seasonality
-                        **model_params        # Debugging options
+    trained_model = pm.auto_arima(clean_df,    # Data to fit to
+                        seasonal=True,         # Seasonality
+                        m=seasonality,         # moving window?
+                        **model_params         # Debugging options
                         ) 
     """
     # Export the trained model as a pickle
@@ -38,15 +39,25 @@ def predict(df, n_periods=30):
     """
 
     # Make a prediction.
-    pred = trained_model.predict(n_periods=n_periods).round()
-    return pred
+    pred_df = trained_model.predict(n_periods=n_periods).round()
+    return clean_df, pred_df
 
 # -------------------------------------------------------- #
 #                    Transforming Data                     #
 # -------------------------------------------------------- #
 def predictions_to_json(preds_array, date_end):
     tmstp = datetime.date.fromisoformat(date_end)
-    for CPPrank in preds_array:
+    for value in preds_array:
         tmstp += datetime.timedelta(days=1)
-        yield {"rank": int(CPPrank),
+        yield {"value": int(value),
                "timestp": tmstp.isoformat()}
+
+def clean_df_to_json(clean_df):
+    try:
+        for tmstp, value in clean_df.iterrows():
+            yield {"value": int(value),
+                "timestp": tmstp.isoformat()}
+    except:
+        for tmstp, value in clean_df.iteritems():
+            yield {"value": int(value),
+                "timestp": tmstp.isoformat()}

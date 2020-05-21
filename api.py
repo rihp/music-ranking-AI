@@ -9,10 +9,10 @@ from src.config import PORT
 from src.controllers import mongo_handler as mah
 from src.controllers import chartmetric_handler as cmh
 from src.controllers import spotify_handler as sfh
-from src.predictor import predict, predictions_to_json
+from src.predictor import predict, predictions_to_json, clean_df_to_json
 
 # Request data since this date
-since="2018-01-01"
+since="2020-01-01"
 
 # FLASK SETUP
 app = Flask(__name__)
@@ -24,22 +24,27 @@ def landing_page():
     f'Hello, world! Welcome to my Music Prediction API.'}
 
 @app.route("/api/artist/<spotify_artist_id>/predict/<metric>")
-def predict_artist_metric(spotify_artist_id, metric, n_periods=30, since=since, until=date.today().isoformat(), platform = 'spotify'):
+def predict_artist_metric(spotify_artist_id, metric, n_periods=15, seasonality=3, since=since,
+                         until=date.today().isoformat(), platform = 'spotify'):
     """
-    Input:  A dataframe with a datetime index and the number of periods to predict
-    Output: The `_id` of the created document in Mongo Atlas
+    Versatile prediction endpoint for a given artist_id and metric.
+    Queries data from sources, cleans timeseries, predicts, sends data to MongoAtlas.
+    Output: The response of Mongo Atlas Upload.
     """
     # 1. Query Available data for the specified `artist_id` in all external data sources. 
     query_params = { "since":since, "until":until, "metric":metric }   
     sf_data = sfh.q_spotify(spotify_artist_id)                                      # Present data about the artist
     cm_data = cmh.q_chartmetric(platform, spotify_artist_id, **query_params)        # Historic data about the artist
     df = cm_data.copy()    
-    # 2. Generate prediction with the defined models
-    pred_df = predict(df, n_periods=n_periods)
-    # 3. Send time-series prediction to Mongo Atlas
+
+    # 2. Generate prediction and cleaned data with the defined models
+    clean_df, pred_df = predict(df, n_periods=n_periods, seasonality=seasonality, fft=True)
+    
+    # 3. Send both time-series (hist and pred) to Mongo Atlas
+    historic_json = list(clean_df_to_json(clean_df))
     preds_json = list(predictions_to_json(pred_df, until))
 
-    message = mah.send_to_database(sf_data, preds_json, metric=metric)
+    message = mah.send_to_database(sf_data, historic_json, preds_json, metric=metric)
     return message
 
 @app.route("/api/artist/<artist_id>/lookup/<metric>")
@@ -62,37 +67,48 @@ def artist_report(artist_id, metric):
     """
     #doc = mah.lookup_in_database(artist_id, metric=metric)
     doc = mah.lookup_in_database(artist_id, metric=metric)
+
     try:
-        preds = doc['predictions']
-        x_labels = [ e['timestp'] for e in preds]
-        y_values = [ e['rank'] for e in preds]
+        a_img = doc['images'][0]['url']
+        a_name = doc['name']
+        a_genres = ' | '.join(doc['genres'])
+        a_popularity = doc['popularity']
+        a_followers = doc['followers']['total']
+        a_href = doc['spotify_href']
+        a_updated = doc['last_update']
+        dynamic_vars = {"a_img":a_img, "a_name":a_name, "a_genres": a_genres, "a_popularity":a_popularity,
+                        "a_followers":a_followers, "a_href":a_href, "a_updated":a_updated}
+        
+        check = doc['past_data'][0]['timestp'][:10]
+        print(type(check))
+        print(check)
+
+        past_x = [ date.fromisoformat(e['timestp'][:10]) for e in doc['past_data']]
+        past_y = [ e['value']   for e in doc['past_data']]
+        pred_x = [ date.fromisoformat(e['timestp'][:10]) for e in doc['predictions']]
+        pred_y = [ e['value']   for e in doc['predictions']]
+        all_labels= past_x + pred_x
+        print( all_labels)
+        # Invert `y` axis for Cross platform performance
+        if metric == "cpp":
+            print(pred_y)
+            pred_y = [ e*-1 for e in pred_y]
+            print(pred_y)
+            past_y = [ e*-1 for e in past_y]
+
         return render_template('main.html',
-                            nvalues=y_values,
-                            nlabels=x_labels,
-                            ncolor='rgba(50, 115, 220, 0.4)')
-    except: return doc
-    #return {"doc":doc,             "x_labels":x_labels,             "y_labels":y_values}
-
-@app.route("/api/chart")
-def sample_report():
-    n, bins = 10000, 20
-    normal = np.random.normal(0, 1, n)
-    gumbel = np.random.gumbel(0, 1, n)
-    weibull = np.random.weibull(5, n)
-    nhistogram = np.histogram(normal, bins=bins)
-    ghistogram = np.histogram(gumbel, bins=bins)
-    whistogram = np.histogram(weibull, bins=bins)
-
-    return render_template('main.html',
-                            nvalues=nhistogram[0].tolist(),
-                            nlabels=nhistogram[1].tolist(),
+                            # Artist Metadata
+                            **dynamic_vars,
+                            # Graph Datapoints
+                            all_labels=all_labels,
+                            past_y=past_y,
+                            pred_y=pred_y,
                             ncolor='rgba(50, 115, 220, 0.4)',
-                            gvalues=ghistogram[0].tolist(),
-                            glabels=ghistogram[1].tolist(),
-                            gcolor='rgba(0, 205, 175, 0.4)',
-                            wvalues=whistogram[0].tolist(),
-                            wlabels=whistogram[1].tolist(),
-                            wcolor='rgba(255, 56, 96, 0.4)')
+                            gcolor='rgba(0, 205, 175, 0.4)')               
+    except Exception as e:
+        print('>>> ERROR: ', e)
+        return doc
+    #return {"doc":doc,             "x_labels":x_labels,             "y_labels":y_values}
 
 
 

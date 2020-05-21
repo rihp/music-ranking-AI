@@ -17,7 +17,7 @@ Consider the use of
  - **Reinforcement Learning**; as time goes by, the model will learn to return more accurate predictions.
  - **Sliding windows**; different moments, all time with the same duration.
 
-# API ENDPOINT EXAMPLE:
+# API ENDPOINTS:
 
 ### HTTP Endpoint from our `api.py`
 ```python
@@ -27,10 +27,8 @@ from flask import app
 from src.predictor import predict
 
 # Artist - Predict CPP (Cross-Platform Performance)
-@app.route(/api/artist/<id>/cpp-rank-prediction?days=2)
-def predict_cpp(id):
-    days = get_params(days)
-    return predict(days)
+```
+/api/artist/<spotify_id>/predict/<metric>
 ```
 
 ### HTTP Response (`JSON`)
