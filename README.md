@@ -4,7 +4,7 @@
 - Will Bad Bunny pass Drake when they release new albums?
 - What is the `trend` in the global ranking?
 - Is the `rank` metric seasonal?
-
+ 
 **Using a time series of many artist rankings, we will try to accurately predict what will be their rank in the future.**
 
 Proposed data sources:
